@@ -46,6 +46,6 @@ tools:
   - name: search_web
 maxturns: 15
 metadata:
-  model: claude-sonnet-4
+  model: claude-4-5-haiku
 version: 1.0.0
 status: draft
