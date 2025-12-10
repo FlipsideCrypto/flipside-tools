@@ -2,6 +2,13 @@
 
 Build and deploy AI agents for blockchain analytics. Query 40+ chains, analyze wallets, track DeFi protocols, and more.
 
+## Install
+Mac or Linux users:
+```
+curl -fsSL https://raw.githubusercontent.com/FlipsideCrypto/flipside-tools/main/install.sh | sh
+```
+Windows user: Download the latest exe from releases (or use `wsl`)
+
 ## Quick Start
 
 **1. Get an API key** from [Flipside](https://flipsidecrypto.xyz/chat/settings/mcp-keys
