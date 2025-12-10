@@ -15,19 +15,19 @@ Windows user: Download the latest exe from releases (or use `wsl`)
 
 **2. Configure the CLI**
 ```bash
-./flipside config init
-# Enter your API key when prompted
+flipside config init
+flipside config set apiKey fk_....
 ```
 
 **3. Verify it works**
 ```bash
-./flipside tools list
+flipside tools list
 ```
 
 **4. Deploy your first agent**
 ```bash
-./flipside agent push examples/defi_analyst.agent.yaml
-./flipside agent run defi_analyst --message "What's the TVL on Aave?"
+flipside agent push examples/defi_analyst.agent.yaml
+flipside agent run defi_analyst --message "What's the TVL on Aave?"
 ```
 
 That's it! You now have a DeFi analyst agent ready to query blockchain data.
@@ -45,10 +45,10 @@ Two example agents in [examples/](./examples/):
 
 ```bash
 # Chat agent - natural language
-./flipside agent run defi_analyst --message "Top DEX protocols by volume this week"
+flipside agent run defi_analyst --message "Top DEX protocols by volume this week"
 
 # Sub agent - structured JSON input
-./flipside agent run tx_parser --data-json '{"tx_hash": "0x...", "chain": "ethereum"}'
+flipside agent run tx_parser --data-json '{"tx_hash": "0x...", "chain": "ethereum"}'
 ```
 
 ---
@@ -57,8 +57,8 @@ Two example agents in [examples/](./examples/):
 
 ### Create a new agent
 ```bash
-./flipside agent init my_agent              # Chat agent (conversational)
-./flipside agent init my_parser --kind sub  # Sub agent (structured I/O)
+flipside agent init my_agent              # Chat agent (conversational)
+flipside agent init my_parser --kind sub  # Sub agent (structured I/O)
 ```
 
 ### Edit the YAML file
@@ -82,9 +82,9 @@ metadata:
 
 ### Deploy and run
 ```bash
-./flipside agent validate my_agent.agent.yaml
-./flipside agent push my_agent.agent.yaml
-./flipside agent run my_agent --message "Hello!"
+flipside agent validate my_agent.agent.yaml
+flipside agent push my_agent.agent.yaml
+flipside agent run my_agent --message "Hello!"
 ```
 
 ---
@@ -106,7 +106,7 @@ Your agents can use these tools:
 | `find_workflow` | Find pre-built analysis workflows |
 | `publish_html` | Publish visualizations to a public URL |
 
-List all tools: `./flipside tools list`
+List all tools: `flipside tools list`
 
 ---
 
@@ -115,7 +115,7 @@ List all tools: `./flipside tools list`
 Don't need an agent? Query data directly:
 
 ```bash
-./flipside tools execute run_sql_query '{"query": "SELECT * FROM ethereum.core.fact_blocks LIMIT 5"}'
+flipside tools execute run_sql_query '{"query": "SELECT * FROM ethereum.core.fact_blocks LIMIT 5"}'
 ```
 
 ---
@@ -126,10 +126,10 @@ Flipside maintains pre-built agents you can use immediately:
 
 ```bash
 # List available agents
-./flipside catalog agents list
+flipside catalog agents list
 
 # Run one
-./flipside catalog agents run data_analyst --message "What's trending in DeFi?"
+flipside catalog agents run data_analyst --message "What's trending in DeFi?"
 ```
 
 ---
@@ -139,7 +139,7 @@ Flipside maintains pre-built agents you can use immediately:
 Start a REPL for continuous conversation:
 
 ```bash
-./flipside chat repl
+flipside chat repl
 ```
 
 ---
@@ -148,26 +148,26 @@ Start a REPL for continuous conversation:
 
 ```bash
 # Agents
-./flipside agent init <name>           # Create new agent
-./flipside agent validate <file>       # Validate YAML
-./flipside agent push <file>           # Deploy agent
-./flipside agent run <name> --message  # Run chat agent
-./flipside agent run <name> --data-json # Run sub agent
-./flipside agent list                  # List your agents
-./flipside agent describe <name>       # View agent details
-./flipside agent delete <name>         # Delete agent
+flipside agent init <name>           # Create new agent
+flipside agent validate <file>       # Validate YAML
+flipside agent push <file>           # Deploy agent
+flipside agent run <name> --message  # Run chat agent
+flipside agent run <name> --data-json # Run sub agent
+flipside agent list                  # List your agents
+flipside agent describe <name>       # View agent details
+flipside agent delete <name>         # Delete agent
 
 # Catalog
-./flipside catalog agents list         # List Flipside agents
-./flipside catalog agents run <name>   # Run catalog agent
+flipside catalog agents list         # List Flipside agents
+flipside catalog agents run <name>   # Run catalog agent
 
 # Tools
-./flipside tools list                  # List available tools
-./flipside tools execute <tool> <json> # Execute a tool directly
+flipside tools list                  # List available tools
+flipside tools execute <tool> <json> # Execute a tool directly
 
 # Config
-./flipside config show                 # Show current config
-./flipside config init                 # Setup wizard
+flipside config show                 # Show current config
+flipside config init                 # Setup wizard
 ```
 
 ### Global Flags
@@ -182,11 +182,11 @@ Start a REPL for continuous conversation:
 
 ## Troubleshooting
 
-**"API key not found"** → Run `./flipside config init`
+**"API key not found"** → Run `flipside config init`
 
-**"Agent not found"** → Check `./flipside agent list` for your agents
+**"Agent not found"** → Check `flipside agent list` for your agents
 
-**Validation errors** → Run `./flipside agent validate <file>` for details
+**Validation errors** → Run `flipside agent validate <file>` for details
 
 **Debug mode** → Add `-v` flag to see full request/response
 
