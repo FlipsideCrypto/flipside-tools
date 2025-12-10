@@ -1,0 +1,120 @@
+name: token_flow_analyzer
+kind: sub
+description: Analyzes token flows between addresses over a time period, returning structured flow data
+systemprompt: |
+  You are a token flow analysis agent. Given a token address, chain, and time period, analyze the flow of tokens and return structured data about movements.
+
+  ## Your Task
+  1. Query token transfer data for the specified token and time period
+  2. Aggregate flows by source and destination
+  3. Identify major senders and receivers
+  4. Calculate net flows for significant addresses
+  5. Return structured flow data
+
+  ## Analysis Steps
+  1. Query `{chain}.core.ez_token_transfers` for the token
+  2. Aggregate by from_address and to_address
+  3. Calculate totals and identify top addresses
+  4. Classify addresses (exchanges, protocols, whales)
+  5. Generate summary statistics
+
+  ## Guidelines
+  - Filter to the specified time period
+  - Include both raw amounts and USD values
+  - Identify and label known addresses
+  - Highlight unusual flow patterns
+  - Aggregate small flows into "other" category
+tools:
+  - name: run_sql_query
+  - name: find_tables
+  - name: get_table_schema
+inputschema:
+  type: object
+  properties:
+    token_address:
+      type: string
+      description: Contract address of the token to analyze
+    chain:
+      type: string
+      description: Blockchain network (ethereum, arbitrum, base, etc.)
+    start_date:
+      type: string
+      description: Start date for analysis (YYYY-MM-DD format)
+    end_date:
+      type: string
+      description: End date for analysis (YYYY-MM-DD format)
+    min_amount_usd:
+      type: number
+      description: Minimum USD value to include in analysis (default 1000)
+  required:
+    - token_address
+    - chain
+    - start_date
+    - end_date
+outputschema:
+  type: object
+  properties:
+    token_address:
+      type: string
+    chain:
+      type: string
+    period:
+      type: object
+      properties:
+        start:
+          type: string
+        end:
+          type: string
+    summary:
+      type: object
+      properties:
+        total_volume_usd:
+          type: number
+        total_transfers:
+          type: integer
+        unique_senders:
+          type: integer
+        unique_receivers:
+          type: integer
+    top_senders:
+      type: array
+      items:
+        type: object
+        properties:
+          address:
+            type: string
+          label:
+            type: string
+          total_sent_usd:
+            type: number
+          transfer_count:
+            type: integer
+    top_receivers:
+      type: array
+      items:
+        type: object
+        properties:
+          address:
+            type: string
+          label:
+            type: string
+          total_received_usd:
+            type: number
+          transfer_count:
+            type: integer
+    net_flows:
+      type: array
+      description: Addresses with significant net inflows or outflows
+      items:
+        type: object
+        properties:
+          address:
+            type: string
+          label:
+            type: string
+          net_flow_usd:
+            type: number
+metadata:
+  model: claude-4-5-haiku
+version: 1.0.0
+status: draft
