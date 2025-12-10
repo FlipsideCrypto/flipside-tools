@@ -11,7 +11,7 @@ Windows user: Download the latest exe from releases (or use `wsl`)
 
 ## Quick Start
 
-**1. Get an API key** from [Flipside](https://flipsidecrypto.xyz/chat/settings/mcp-keys
+**1. Get an API key** from [Flipside](https://flipsidecrypto.xyz/chat/settings/mcp-keys)
 
 **2. Configure the CLI**
 ```bash
