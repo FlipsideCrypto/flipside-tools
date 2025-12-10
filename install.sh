@@ -89,7 +89,7 @@ check_dependencies() {
 
 # Get the latest version from GitHub API
 get_latest_version() {
-    info "Fetching latest version..."
+    info "Fetching latest version..." >&2
 
     LATEST=$(curl -fsSL "$GITHUB_API" 2>/dev/null | grep '"tag_name"' | head -1 | sed -E 's/.*"v([^"]+)".*/\1/')
 
