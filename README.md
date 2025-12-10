@@ -4,7 +4,7 @@ Build and deploy AI agents for blockchain analytics. Query 40+ chains, analyze w
 
 ## Quick Start
 
-**1. Get an API key** from [flipsidecrypto.xyz](https://flipsidecrypto.xyz) → Settings → MCP Keys
+**1. Get an API key** from [Flipside](https://flipsidecrypto.xyz/chat/settings/mcp-keys
 
 **2. Configure the CLI**
 ```bash
@@ -29,42 +29,20 @@ That's it! You now have a DeFi analyst agent ready to query blockchain data.
 
 ## Example Agents
 
-This repo includes 7 ready-to-deploy agents in the [examples/](./examples/) directory:
+Two example agents in [examples/](./examples/):
 
 | Agent | Type | What it does |
 |-------|------|--------------|
 | `defi_analyst` | chat | Analyze DeFi protocols - TVL, liquidity, DEX volume |
-| `wallet_analyzer` | chat | Investigate wallet portfolios and transaction patterns |
-| `swap_assistant` | chat | Execute cross-chain token swaps |
-| `nft_analyst` | chat | Track NFT collections, sales, and holders |
-| `protocol_researcher` | chat | Deep-dive protocol research with on-chain + web data |
 | `tx_parser` | sub | Parse any transaction into structured JSON |
-| `token_flow_analyzer` | sub | Analyze token movements over time |
 
-### Deploy all examples at once
 ```bash
-for f in examples/*.agent.yaml; do ./flipside agent push "$f"; done
-```
+# Chat agent - natural language
+./flipside agent run defi_analyst --message "Top DEX protocols by volume this week"
 
-### Try them out
-```bash
-# DeFi analysis
-./flipside agent run defi_analyst --message "Top DEX protocols by volume this week on Arbitrum"
-
-# Wallet investigation
-./flipside agent run wallet_analyzer --message "Analyze vitalik.eth's recent activity"
-
-# NFT market
-./flipside agent run nft_analyst --message "What are the top NFT sales today?"
-
-# Cross-chain swaps
-./flipside agent run swap_assistant --message "Get a quote to swap 100 USDC from Ethereum to Base"
-
-# Transaction parsing (sub agent - uses JSON input)
+# Sub agent - structured JSON input
 ./flipside agent run tx_parser --data-json '{"tx_hash": "0x...", "chain": "ethereum"}'
 ```
-
-See [examples/README.md](./examples/README.md) for detailed docs on each agent.
 
 ---
 
