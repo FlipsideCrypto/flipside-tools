@@ -21,7 +21,7 @@ flipside config set apiKey fk_....
 
 **3. Verify it works**
 ```bash
-flipside tools list
+flipside whoami
 ```
 
 **4. Deploy your first agent**
@@ -115,7 +115,7 @@ List all tools: `flipside tools list`
 Don't need an agent? Query data directly:
 
 ```bash
-flipside tools execute run_sql_query '{"query": "SELECT * FROM ethereum.core.fact_blocks LIMIT 5"}'
+flipside query "SELECT * FROM ethereum.core.fact_blocks LIMIT 5"
 ```
 
 ---
@@ -140,6 +140,16 @@ Start a REPL for continuous conversation:
 
 ```bash
 flipside chat repl
+```
+
+---
+
+## Stay up to date
+
+Use the built in updater to stay up to date.
+
+```bash
+flipside update
 ```
 
 ---
