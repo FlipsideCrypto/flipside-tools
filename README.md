@@ -77,7 +77,7 @@ tools:
 
 maxturns: 10
 metadata:
-  model: claude-sonnet-4   # or claude-4-5-haiku, claude-opus-4-5
+  model: claude-4-5-haiku
 ```
 
 ### Deploy and run
