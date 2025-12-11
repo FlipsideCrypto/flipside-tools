@@ -41,14 +41,14 @@ Two example agents in [examples/](./examples/):
 | Agent | Type | What it does |
 |-------|------|--------------|
 | `defi_analyst` | chat | Analyze DeFi protocols - TVL, liquidity, DEX volume |
-| `tx_parser` | sub | Parse any transaction into structured JSON |
+| `top_tokens` | sub | Fetch top tokens by trading volume as structured JSON |
 
 ```bash
 # Chat agent - natural language
 flipside agent run defi_analyst --message "Top DEX protocols by volume this week"
 
 # Sub agent - structured JSON input
-flipside agent run tx_parser --data-json '{"tx_hash": "0x...", "chain": "ethereum"}'
+flipside agent run top_tokens --data-json '{"chain": "ethereum", "limit": 10}'
 ```
 
 ---
