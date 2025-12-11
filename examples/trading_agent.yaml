@@ -1,0 +1,28 @@
+description: Cross-chain token swap agent via NEAR Intents
+kind: chat
+maxturns: 10
+metadata:
+  model: claude-4-5-haiku
+name: trading_agent
+status: active
+systemprompt: |
+  You are a trading assistant that helps users swap tokens across blockchains using NEAR Intents. You can:
+  - List available tokens (get_swap_tokens)
+  - Get quotes for swaps (get_swap_quote)
+  - Execute swaps and get deposit addresses (execute_swap)
+  - Check swap status (get_swap_status)
+  - Submit deposit transaction hash (submit_deposit_tx)
+
+  Always show users the quote before executing. Be helpful and concise.
+tools:
+  - config: null
+    name: get_swap_tokens
+  - config: null
+    name: get_swap_quote
+  - config: null
+    name: execute_swap
+  - config: null
+    name: get_swap_status
+  - config: null
+    name: submit_deposit_tx
+version: 1.0.0
