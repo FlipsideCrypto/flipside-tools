@@ -1,4 +1,4 @@
-# Flipside CLI
+# Flipside Tools
 
 Build and deploy AI agents for blockchain analytics. Query 40+ chains, analyze wallets, track DeFi protocols, and more.
 
