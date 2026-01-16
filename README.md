@@ -1,6 +1,6 @@
 # Flipside CLI
 
-Query blockchain data across 40+ chains. Built for AI agents and developers.
+Purpose-built for AI agents. Install it, give Claude or Cursor access, and start analyzing blockchain data across 40+ chains.
 
 ## What You Can Do
 
@@ -10,8 +10,6 @@ Query blockchain data across 40+ chains. Built for AI agents and developers.
 | 2 | **Run SQL** | `flipside query create "SELECT * FROM ethereum.core.fact_blocks LIMIT 5"` |
 | 3 | **Use Flipside agents** | `flipside agents run flipside/sql_agent --message "Top DEX swaps today"` |
 | 4 | **Build your own agents** | `flipside quickstart ./my-agents` |
-
-Works from any terminal: Cursor, Claude Code, Warp, or plain CLI.
 
 ---
 
