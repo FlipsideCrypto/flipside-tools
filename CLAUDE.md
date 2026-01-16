@@ -10,7 +10,7 @@ Run this command to get full usage instructions:
 flipside llm onboard
 ```
 
-Or load the skill: [docs/flipside.skill.md](https://github.com/FlipsideCrypto/flipside-tools/blob/main/docs/flipside.skill.md)
+Or load the skill: [.claude/skills/flipside.md](https://github.com/FlipsideCrypto/flipside-tools/blob/main/.claude/skills/flipside.md)
 
 ## Quick Reference
 

@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flipside --help:*)",
+      "Bash(flipside llm --help:*)",
+      "Bash(flipside agents --help:*)",
+      "Bash(flipside skills --help:*)",
+      "Bash(flipside chat --help:*)",
+      "Bash(flipside query --help:*)",
+      "Bash(flipside llm onboard:*)",
+      "Bash(flipside agents init --help:*)",
+      "Bash(flipside agents run --help:*)",
+      "Bash(flipside quickstart --help:*)",
+      "Bash(flipside workflows --help:*)",
+      "Bash(flipside uploads --help:*)",
+      "Bash(flipside chat send-message:*)",
+      "Bash(flipside skills init --help:*)",
+      "Bash(flipside query create --help:*)",
+      "Bash(flipside query-run:*)",
+      "Bash(flipside --version:*)",
+      "Bash(flipside config --help:*)",
+      "Bash(flipside workflows init --help:*)",
+      "Bash(flipside agents push --help:*)",
+      "Bash(flipside agents describe --help:*)",
+      "Bash(flipside chat create --help:*)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(gh pr create:*)"
+    ]
+  }
+}

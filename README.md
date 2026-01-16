@@ -30,7 +30,7 @@ Copy one of these files into your repo:
 - [CLAUDE.md](./CLAUDE.md) — For Claude Code
 - [AGENTS.md](./AGENTS.md) — For Cursor and other agents
 
-Or use the skill directly: [docs/flipside.skill.md](./docs/flipside.skill.md)
+Or use the skill directly: [.claude/skills/flipside.md](./.claude/skills/flipside.md)
 
 ---
 
@@ -229,7 +229,7 @@ flipside config show           View config
 
 - [CLAUDE.md](./CLAUDE.md) — Drop into your repo for Claude Code
 - [AGENTS.md](./AGENTS.md) — Drop into your repo for Cursor
-- [docs/flipside.skill.md](./docs/flipside.skill.md) — Claude Code skill for Flipside
+- [.claude/skills/flipside.md](./.claude/skills/flipside.md) — Claude Code skill
 - [docs/agents.md](./docs/agents.md) — Agent YAML reference
 - [docs/skills.md](./docs/skills.md) — Skill YAML reference
 - [Flipside Docs](https://docs.flipsidecrypto.xyz)
