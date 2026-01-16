@@ -1,12 +1,8 @@
 # Flipside CLI
 
-The Flipside CLI was designed from the ground up to work directly with your AI coding assistant of choice. Claude Code pictured below:
+Blockchain data for AI agents. Query [40+ chains](https://docs.flipsidecrypto.xyz/blockchain-data/supported-blockchains) from Claude Code, Cursor, or any terminal.
 
-![Flipside Chat Example](./docs/images/flipside-chat-example.png)
-
-Access the entire Flipside platform—agents, seven trillion rows of blockchain data across [40+ chains](https://docs.flipsidecrypto.xyz/blockchain-data/supported-blockchains), and more—directly from your terminal.
-
----
+![Flipside CLI in Claude Code](./docs/images/flipside-chat-example.png)
 
 ## What You Can Do
 
