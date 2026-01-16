@@ -1,211 +1,200 @@
 # Flipside CLI
 
-Build and deploy AI agents for blockchain analytics. Query 40+ chains, analyze wallets, track DeFi protocols, and more.
+Blockchain data for AI agents. Query seven trillion rows across [40+ chains](https://docs.flipsidecrypto.xyz/blockchain-data/supported-blockchains) from Claude Code, Cursor, or any terminal.
+
+![Flipside CLI in Claude Code](./docs/images/flipside-chat-example.png)
+
+## What You Can Do
+
+| # | Use Case | Command |
+|---|----------|---------|
+| 1 | **Chat with your data** | `flipside chat` |
+| 2 | **Use Flipside agents** | `flipside agents run flipside/sql_agent --message "Top DEX swaps today"` |
+| 3 | **Build your own agents** | `flipside quickstart ./my-agents` |
+| 4 | **Upload your data** | `flipside uploads upload data.csv` |
+
+---
 
 ## Install
 
-**Mac/Linux:**
 ```bash
 curl -fsSL https://raw.githubusercontent.com/FlipsideCrypto/flipside-tools/main/install.sh | sh
+flipside login
 ```
 
-**Windows:** Download the latest exe from [releases](https://github.com/flipsidecrypto/flipside-cli/releases) or use `wsl`
+Windows: Use WSL or download from [releases](https://github.com/flipsidecrypto/flipside-cli/releases).
 
-## Quick Start
+### For AI Coding Assistants
 
-```bash
-# 1. Initialize with your API key (get one at flipsidecrypto.xyz/chat/settings/mcp-keys)
-flipside init
+Copy one of these files into your repo:
 
-# 2. Generate example agents in current directory
-flipside quickstart ./flipside-agents && cd flipside-agents
+- [CLAUDE.md](./CLAUDE.md) — For Claude Code
+- [AGENTS.md](./AGENTS.md) — For Cursor and other agents
 
-# 3. Deploy and run an example
-flipside agent push defi_analyst.agent.yaml
-flipside agent run defi_analyst --message "What's the TVL on Aave?"
-```
-
-That's it! You now have a DeFi analyst agent ready to query blockchain data.
+Or use the skill directly: [.claude/skills/flipside.md](./.claude/skills/flipside.md)
 
 ---
 
-## Example Agents
+## Use Agents
 
-After running `flipside quickstart`, you'll have these example agents:
-
-| Agent | Type | What it does |
-|-------|------|--------------|
-| `defi_analyst` | chat | Analyze DeFi protocols - TVL, liquidity, DEX volume |
-| `top_tokens` | sub | Fetch top tokens by trading volume as structured JSON |
+Agents understand Flipside's data warehouse. They write correct SQL so you don't have to.
 
 ```bash
-# Chat agent - natural language
-flipside agent run defi_analyst --message "Top DEX protocols by volume this week"
+# Run Flipside's SQL agent
+flipside agents run flipside/sql_agent --message "What's the TVL on Aave?"
 
-# Sub agent - structured JSON input
-flipside agent run top_tokens --data-json '{"chain": "ethereum", "limit": 10}'
+# List available agents
+flipside agents list
+
+# Run your own agent
+flipside agents run your-org/my_agent --message "Analyze ETH transfers"
+```
+
+> **Tip**: Find your org name with `flipside whoami`
+
+### Agent Types
+
+| Type | Flag | Use Case |
+|------|------|----------|
+| **Chat** | `--message "..."` | Natural language queries |
+| **Sub** | `--data-json '{...}'` | Structured input/output for pipelines |
+
+---
+
+## Build Agents
+
+```bash
+# Generate examples
+flipside quickstart ./my-agents
+cd my-agents
+
+# Deploy and run
+flipside agents push sql_analyst.agent.yaml
+flipside agents run your-org/sql_analyst --message "Top protocols by volume"
+```
+
+See [docs/agents.md](./docs/agents.md) for YAML structure and configuration.
+
+---
+
+## Build Skills
+
+Skills package domain knowledge that agents invoke with `use_skill()`.
+
+```bash
+flipside skills init my_skill
+flipside skills push my_skill.skill.yaml
+```
+
+See [docs/skills.md](./docs/skills.md) for YAML structure and the `knowledge` field.
+
+---
+
+## Uploads
+
+Upload CSV files to join your data with blockchain data in SQL queries.
+
+```bash
+# Upload a file
+flipside uploads upload wallets.csv
+
+# List uploads
+flipside uploads list
+```
+
+Reference uploaded files in SQL with `${upload:filename}`:
+
+```sql
+SELECT w.label, b.balance
+FROM ${upload:wallets.csv} w
+JOIN ethereum.core.fact_balances b ON w.address = b.address
 ```
 
 ---
 
-## Build Your Own Agent
+## Reference
 
-### Create a new agent
-```bash
-flipside agent init my_agent              # Chat agent (conversational)
-flipside agent init my_parser --kind sub  # Sub agent (structured I/O)
-```
+### Tools (for Agent Builders)
 
-### Edit the YAML file
-```yaml
-name: my_agent
-kind: chat
-description: "What this agent does"
-
-systemprompt: |
-  You are an expert at... [customize this]
-
-tools:
-  - name: run_sql_query    # Query blockchain data
-  - name: find_tables      # Discover available tables
-  - name: search_web       # Web search for context
-
-maxturns: 10
-metadata:
-  model: claude-4-5-haiku
-```
-
-### Deploy and run
-```bash
-flipside agent validate my_agent.agent.yaml
-flipside agent push my_agent.agent.yaml
-flipside agent run my_agent --message "Hello!"
-```
-
----
-
-## Available Tools
-
-Your agents can use these tools:
+These are tools you can give your agents access to:
 
 | Tool | Description |
 |------|-------------|
-| `run_sql_query` | Execute SQL against 40+ blockchain datasets |
-| `find_tables` | Semantic search to discover relevant tables |
+| `find_tables` | Semantic search to discover tables |
 | `get_table_schema` | Get column details for a table |
-| `search_web` | Search the web for context |
-| `get_swap_quote` | Get cross-chain swap quotes |
-| `execute_swap` | Execute a cross-chain swap |
-| `get_swap_status` | Check swap status |
-| `get_swap_tokens` | List available swap tokens |
-| `find_workflow` | Find pre-built analysis workflows |
-| `publish_html` | Publish visualizations to a public URL |
-
-List all tools: `flipside tools list`
-
----
-
-## Run SQL Directly
-
-Don't need an agent? Query data directly:
+| `run_sql_query` | Execute SQL against the warehouse |
+| `use_skill` | Invoke a skill at runtime |
+| `publish_html` | Publish visualizations to a URL |
 
 ```bash
-flipside query "SELECT * FROM ethereum.core.fact_blocks LIMIT 5"
+flipside tools list              # List all tools
+flipside tools schema <tool>     # Get tool schema
 ```
 
----
+### Other Features
 
-## Use Catalog Agents
-
-Flipside maintains pre-built agents you can use immediately:
-
+**Workflows** — Automated pipelines for recurring analysis:
 ```bash
-# List available agents
-flipside catalog agents list
-
-# Run one
-flipside catalog agents run data_analyst --message "What's trending in DeFi?"
-```
-
----
-
-## Interactive Chat
-
-Start a REPL for continuous conversation:
-
-```bash
-flipside chat repl
-```
-
----
-
-## Stay Up to Date
-
-```bash
-flipside update
-```
-
----
-
-## Command Reference
-
-```bash
-# Setup
-flipside init                        # Configure API key (interactive)
-flipside quickstart [path]           # Generate example agents
-
-# Agents
-flipside agent init <name>           # Create new agent
-flipside agent validate <file>       # Validate YAML
-flipside agent push <file>           # Deploy agent
-flipside agent run <name> --message  # Run chat agent
-flipside agent run <name> --data-json # Run sub agent
-flipside agent list                  # List your agents
-flipside agent describe <name>       # View agent details
-flipside agent delete <name>         # Delete agent
-
-# Catalog
-flipside catalog agents list         # List Flipside agents
-flipside catalog agents run <name>   # Run catalog agent
-
-# Tools
-flipside tools list                  # List available tools
-flipside tools execute <tool> <json> # Execute a tool directly
-
-# Config
-flipside config show                 # Show current config
-flipside config set <key> <value>   # Update config value
+flipside workflows init my_workflow
+flipside workflows push my_workflow.yaml
+flipside workflows run <id>
 ```
 
 ### Global Flags
 
 | Flag | Description |
 |------|-------------|
-| `-j, --json` | Output as JSON (for scripting) |
+| `-j, --json` | Output as JSON |
 | `-v, --verbose` | Show request/response details |
-| `--api-key` | Override API key for this command |
+| `-e, --env` | Environment: `local`, `staging`, `prod` |
+
+### Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| "Not authenticated" | Run `flipside login` |
+| "Agent not found" | Use `org/name` format, check `flipside agents list` |
+| Validation errors | Run `flipside agents validate <file>` |
+
+### All Commands
+
+```
+flipside login                 Authenticate
+flipside whoami                Show current org
+flipside update                Update CLI
+
+flipside agents list           List agents
+flipside agents init <name>    Create agent YAML
+flipside agents push <file>    Deploy agent
+flipside agents run org/name   Execute agent
+flipside agents describe       View details
+flipside agents delete         Delete agent
+
+flipside skills list           List skills
+flipside skills init <name>    Create skill YAML
+flipside skills push <file>    Deploy skill
+flipside skills describe       View details
+
+flipside query create "SQL"    Run a query
+flipside query list            List queries
+flipside query-run status <id> Check run status
+flipside query-run download    Download results
+
+flipside workflows init        Create workflow
+flipside workflows push        Deploy workflow
+flipside workflows run         Trigger workflow
+
+flipside uploads upload        Upload CSV
+flipside uploads list          List uploads
+
+flipside chat                  Interactive REPL
+flipside config show           View config
+```
 
 ---
 
-## API Reference
+## More
 
-The CLI is a wrapper around Flipside's public REST API. For building your own integrations, see the [API Reference](./docs/API.md).
-
----
-
-## Troubleshooting
-
-**"API key not found"** → Run `flipside init`
-
-**"Agent not found"** → Check `flipside agent list` for your agents
-
-**Validation errors** → Run `flipside agent validate <file>` for details
-
-**Debug mode** → Add `-v` flag to see full request/response
-
----
-
-## Links
-
-- [API Reference](./docs/API.md)
-- [Flipside Docs](https://docs.flipsidecrypto.xyz)
+- [docs/agents.md](./docs/agents.md) — Agent YAML reference
+- [docs/skills.md](./docs/skills.md) — Skill YAML reference
+- [Flipside Docs](https://docs.flipsidecrypto.xyz) — Full documentation
