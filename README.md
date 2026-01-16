@@ -1,6 +1,12 @@
 # Flipside CLI
 
-Purpose-built for AI agents. Install it, give Claude or Cursor access, and start analyzing blockchain data across [40+ chains](https://docs.flipsidecrypto.xyz/blockchain-data/supported-blockchains).
+The Flipside CLI was designed from the ground up to work directly with your AI coding assistant of choice. Claude Code pictured below:
+
+![Flipside Chat Example](./docs/images/flipside-chat-example.png)
+
+Access the entire Flipside platform—agents, seven trillion rows of blockchain data across [40+ chains](https://docs.flipsidecrypto.xyz/blockchain-data/supported-blockchains), and more—directly from your terminal.
+
+---
 
 ## What You Can Do
 
@@ -42,8 +48,6 @@ flipside chat
 ```
 
 Ask questions, get SQL generated, see results—all in one session. The agent remembers context across turns.
-
-![Flipside Chat Example](./docs/images/flipside-chat-example.png)
 
 Or run SQL directly if you know the schema:
 
