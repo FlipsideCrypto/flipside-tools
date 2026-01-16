@@ -10,6 +10,7 @@ Purpose-built for AI agents. Install it, give Claude or Cursor access, and start
 | 2 | **Run SQL** | `flipside query create "SELECT * FROM ethereum.core.fact_blocks LIMIT 5"` |
 | 3 | **Use Flipside agents** | `flipside agents run flipside/sql_agent --message "Top DEX swaps today"` |
 | 4 | **Build your own agents** | `flipside quickstart ./my-agents` |
+| 5 | **Upload your data** | `flipside uploads upload data.csv` |
 
 ---
 
