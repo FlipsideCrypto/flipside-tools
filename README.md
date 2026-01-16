@@ -1,6 +1,6 @@
 # Flipside CLI
 
-Blockchain data for AI agents. Query [40+ chains](https://docs.flipsidecrypto.xyz/blockchain-data/supported-blockchains) from Claude Code, Cursor, or any terminal.
+Blockchain data for AI agents. Query seven trillion rows across [40+ chains](https://docs.flipsidecrypto.xyz/blockchain-data/supported-blockchains) from Claude Code, Cursor, or any terminal.
 
 ![Flipside CLI in Claude Code](./docs/images/flipside-chat-example.png)
 
