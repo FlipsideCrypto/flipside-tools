@@ -1,6 +1,6 @@
 # Flipside CLI
 
-Purpose-built for AI agents. Install it, give Claude or Cursor access, and start analyzing blockchain data across 40+ chains.
+Purpose-built for AI agents. Install it, give Claude or Cursor access, and start analyzing blockchain data across [40+ chains](https://docs.flipsidecrypto.xyz/blockchain-data/supported-blockchains).
 
 ## What You Can Do
 
@@ -42,6 +42,8 @@ flipside chat
 ```
 
 Ask questions, get SQL generated, see results—all in one session. The agent remembers context across turns.
+
+![Flipside Chat Example](./docs/images/flipside-chat-example.png)
 
 Or run SQL directly if you know the schema:
 

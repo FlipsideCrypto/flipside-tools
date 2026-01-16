@@ -1,43 +1,47 @@
-# Flipside CLI Skill
+# Flipside CLI
 
 Query blockchain data across 40+ chains via SQL and AI agents.
 
-## Setup
+## Before You Start
 
-Run `flipside llm onboard` for full usage instructions.
-
-## Quick Commands
+Run this command to get full usage instructions:
 
 ```bash
-# Run SQL
+flipside llm onboard
+```
+
+## Quick Reference
+
+```bash
+# Run SQL directly
 flipside query create "SELECT * FROM ethereum.core.fact_blocks LIMIT 5"
 
-# Use an agent (recommended)
-flipside agents run flipside/sql_agent --message "Top DEX swaps today"
+# Use an agent (recommended for complex queries)
+flipside agents run flipside/sql_agent --message "Top DEX swaps on Ethereum today"
 
-# List agents
+# List available agents
 flipside agents list
 
-# Check org
+# Check your org
 flipside whoami
 ```
 
-## When to Use Agents vs SQL
+## Key Rules
 
-**Use agents** for:
-- Complex queries where you don't know the schema
-- Natural language questions about blockchain data
-- Any query involving joins or aggregations
+### Always Discover Agents First
 
-**Use SQL directly** for:
-- Simple queries where you know the exact table/columns
-- Quick one-off lookups
+1. **If a user mentions a specific agent**: Always run `flipside agents list` first to find the correct agent name. Agent names may differ from what the user says (e.g., "monad validator agent" might be `flipside/monad_staking_agent`).
 
-## Key Pattern
+2. **If a user asks about a specific topic** (e.g., "forecast validator earnings on Monad", "analyze staking rewards"): Run `flipside agents list` first to check if there's a specialized agent for that domain before defaulting to `flipside/sql_agent`. Specialized agents have domain knowledge and produce better results.
 
 ```bash
-# Always prefer agents for complex queries
-flipside agents run flipside/sql_agent --message "Your question here"
+# Always start by listing agents to find the right one
+flipside agents list
+
+# Then use the most relevant agent for the task
+flipside agents run <correct_agent_name> --message "your query"
 ```
 
-Agents know the schema and write correct SQL. Don't guess at table names or columns.
+### Use Agents Over Raw SQL
+
+For complex queries, use agents instead of writing SQL directly. Agents know the schema and write correct queries.
