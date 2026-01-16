@@ -35,24 +35,6 @@ Or use the skill directly: [.claude/skills/flipside.md](./.claude/skills/flipsid
 
 ---
 
-## Chat
-
-Interactive REPL for exploring blockchain data with natural language.
-
-```bash
-flipside chat
-```
-
-Ask questions, get SQL generated, see results—all in one session. The agent remembers context across turns.
-
-Or run SQL directly if you know the schema:
-
-```bash
-flipside query create "SELECT COUNT(*) FROM ethereum.core.fact_blocks"
-```
-
----
-
 ## Use Agents
 
 Agents understand Flipside's data warehouse. They write correct SQL so you don't have to.
