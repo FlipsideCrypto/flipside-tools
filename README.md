@@ -6,9 +6,10 @@ Query blockchain data across 40+ chains. Built for AI agents and developers.
 
 | # | Use Case | Command |
 |---|----------|---------|
-| 1 | **Run SQL** | `flipside query create "SELECT * FROM ethereum.core.fact_blocks LIMIT 5"` |
-| 2 | **Use Flipside agents** | `flipside agents run flipside/sql_agent --message "Top DEX swaps today"` |
-| 3 | **Build your own agents** | `flipside quickstart ./my-agents` |
+| 1 | **Chat with your data** | `flipside chat` |
+| 2 | **Run SQL** | `flipside query create "SELECT * FROM ethereum.core.fact_blocks LIMIT 5"` |
+| 3 | **Use Flipside agents** | `flipside agents run flipside/sql_agent --message "Top DEX swaps today"` |
+| 4 | **Build your own agents** | `flipside quickstart ./my-agents` |
 
 Works from any terminal: Cursor, Claude Code, Warp, or plain CLI.
 
@@ -36,6 +37,7 @@ Or use the skill directly: [docs/flipside.skill.md](./docs/flipside.skill.md)
 
 ## In This Doc
 
+- [Chat](#chat) — Interactive data exploration
 - [Run SQL](#run-sql) — Execute queries directly
 - [Use Agents](#use-agents) — Run Flipside's pre-built agents or your own
 - [Build Agents](#build-agents) — Create your own agents
@@ -44,21 +46,25 @@ Or use the skill directly: [docs/flipside.skill.md](./docs/flipside.skill.md)
 
 ---
 
+## Chat
+
+Interactive REPL for exploring blockchain data with natural language.
+
+```bash
+flipside chat
+```
+
+Ask questions, get SQL generated, see results—all in one session. The agent remembers context across turns.
+
+---
+
 ## Run SQL
 
 ```bash
-# Run a query
 flipside query create "SELECT COUNT(*) FROM ethereum.core.fact_blocks"
-
-# List your queries
-flipside query list
-
-# Check run status and download results
-flipside query-run status <run-id>
-flipside query-run download <run-id>
 ```
 
-For complex analysis, use an agent instead—they know the schema.
+For complex analysis, use chat or an agent instead—they know the schema.
 
 ---
 
@@ -148,13 +154,6 @@ flipside workflows run <id>
 ```bash
 flipside uploads upload data.csv
 flipside uploads list
-```
-
-**Chat** — Interactive sessions:
-```bash
-flipside chat                    # Start REPL
-flipside chat create             # Create session
-flipside chat send-message "..." --session-id <id>
 ```
 
 ### Global Flags
