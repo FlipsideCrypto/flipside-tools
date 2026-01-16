@@ -9,7 +9,7 @@ Purpose-built for AI agents. Install it, give Claude or Cursor access, and start
 | 1 | **Chat with your data** | `flipside chat` |
 | 2 | **Run SQL** | `flipside query create "SELECT * FROM ethereum.core.fact_blocks LIMIT 5"` |
 | 3 | **Use Flipside agents** | `flipside agents run flipside/sql_agent --message "Top DEX swaps today"` |
-| 4 | **Build your own agents** | `flipside quickstart ./my-agents` |
+| 4 | **Build your own agents** | `flipside agents init my_agent` |
 | 5 | **Upload your data** | `flipside uploads upload data.csv` |
 
 ---
@@ -41,6 +41,7 @@ Or use the skill directly: [docs/flipside.skill.md](./docs/flipside.skill.md)
 - [Use Agents](#use-agents) — Run Flipside's pre-built agents or your own
 - [Build Agents](#build-agents) — Create your own agents
 - [Build Skills](#build-skills) — Package domain knowledge
+- [Uploads](#uploads) — Join your data with blockchain data
 - [Reference](#reference) — Commands, tools, flags
 
 ---
@@ -122,6 +123,28 @@ See [docs/skills.md](./docs/skills.md) for YAML structure and the `knowledge` fi
 
 ---
 
+## Uploads
+
+Upload CSV files to join your data with blockchain data in SQL queries.
+
+```bash
+# Upload a file
+flipside uploads upload wallets.csv
+
+# List uploads
+flipside uploads list
+```
+
+Reference uploaded files in SQL with `${upload:filename}`:
+
+```sql
+SELECT w.label, b.balance
+FROM ${upload:wallets.csv} w
+JOIN ethereum.core.fact_balances b ON w.address = b.address
+```
+
+---
+
 ## Reference
 
 ### Available Tools
@@ -147,12 +170,6 @@ flipside tools schema <tool>     # Get tool schema
 flipside workflows init my_workflow
 flipside workflows push my_workflow.yaml
 flipside workflows run <id>
-```
-
-**Uploads** — Reference CSV files in SQL with `${upload:filename}`:
-```bash
-flipside uploads upload data.csv
-flipside uploads list
 ```
 
 ### Global Flags
