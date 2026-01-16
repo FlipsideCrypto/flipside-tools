@@ -7,10 +7,9 @@ Purpose-built for AI agents. Install it, give Claude or Cursor access, and start
 | # | Use Case | Command |
 |---|----------|---------|
 | 1 | **Chat with your data** | `flipside chat` |
-| 2 | **Run SQL** | `flipside query create "SELECT * FROM ethereum.core.fact_blocks LIMIT 5"` |
-| 3 | **Use Flipside agents** | `flipside agents run flipside/sql_agent --message "Top DEX swaps today"` |
-| 4 | **Build your own agents** | `flipside agents init my_agent` |
-| 5 | **Upload your data** | `flipside uploads upload data.csv` |
+| 2 | **Use Flipside agents** | `flipside agents run flipside/sql_agent --message "Top DEX swaps today"` |
+| 3 | **Build your own agents** | `flipside quickstart ./my-agents` |
+| 4 | **Upload your data** | `flipside uploads upload data.csv` |
 
 ---
 
@@ -34,18 +33,6 @@ Or use the skill directly: [.claude/skills/flipside.md](./.claude/skills/flipsid
 
 ---
 
-## In This Doc
-
-- [Chat](#chat) — Interactive data exploration
-- [Run SQL](#run-sql) — Execute queries directly
-- [Use Agents](#use-agents) — Run Flipside's pre-built agents or your own
-- [Build Agents](#build-agents) — Create your own agents
-- [Build Skills](#build-skills) — Package domain knowledge
-- [Uploads](#uploads) — Join your data with blockchain data
-- [Reference](#reference) — Commands, tools, flags
-
----
-
 ## Chat
 
 Interactive REPL for exploring blockchain data with natural language.
@@ -56,15 +43,11 @@ flipside chat
 
 Ask questions, get SQL generated, see results—all in one session. The agent remembers context across turns.
 
----
-
-## Run SQL
+Or run SQL directly if you know the schema:
 
 ```bash
 flipside query create "SELECT COUNT(*) FROM ethereum.core.fact_blocks"
 ```
-
-For complex analysis, use chat or an agent instead—they know the schema.
 
 ---
 
@@ -147,7 +130,9 @@ JOIN ethereum.core.fact_balances b ON w.address = b.address
 
 ## Reference
 
-### Available Tools
+### Tools (for Agent Builders)
+
+These are tools you can give your agents access to:
 
 | Tool | Description |
 |------|-------------|
@@ -156,7 +141,6 @@ JOIN ethereum.core.fact_balances b ON w.address = b.address
 | `run_sql_query` | Execute SQL against the warehouse |
 | `use_skill` | Invoke a skill at runtime |
 | `publish_html` | Publish visualizations to a URL |
-| `fetch_web_page` | Fetch content from a URL |
 
 ```bash
 flipside tools list              # List all tools
@@ -227,9 +211,6 @@ flipside config show           View config
 
 ## More
 
-- [CLAUDE.md](./CLAUDE.md) — Drop into your repo for Claude Code
-- [AGENTS.md](./AGENTS.md) — Drop into your repo for Cursor
-- [.claude/skills/flipside.md](./.claude/skills/flipside.md) — Claude Code skill
 - [docs/agents.md](./docs/agents.md) — Agent YAML reference
 - [docs/skills.md](./docs/skills.md) — Skill YAML reference
-- [Flipside Docs](https://docs.flipsidecrypto.xyz)
+- [Flipside Docs](https://docs.flipsidecrypto.xyz) — Full documentation
