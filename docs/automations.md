@@ -13,7 +13,7 @@ flipside automations get <id>                 # View automation details
 flipside automations delete <id>              # Delete automation
 
 flipside automations run <id>                 # Run automation
-flipside automations run <id> -i '{"key":"value"}'  # Run with inputs
+flipside automations run <id> -i '{"wallet_address":"0x..."}'  # Run with inputs
 
 flipside automations runs list <automation-id>      # List runs
 flipside automations runs get <run-id>              # Get run details
@@ -112,6 +112,8 @@ edges:
 | `telegram` | Send Telegram alerts |
 | `upload` | Pull in your own CSV data |
 | `conditional` | Branch logic based on natural language conditions |
+
+**Data flow:** Steps connected by edges automatically receive upstream outputs. No explicit variable references needed—LLM and agent steps see all incoming data.
 
 ## Input Variables
 
