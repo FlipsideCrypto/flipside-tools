@@ -25,6 +25,27 @@ flipside automations runs cancel <run-id>           # Cancel running automation
 flipside chat --run <run-id>                        # Chat with an agent to analyze results
 ```
 
+## Research Before Building
+
+Use Flipside agents to discover tables, understand schemas, and prototype queries before building automations:
+
+```bash
+# Interactive chat - explore data conversationally
+flipside chat
+
+# Quick research queries via SQL agent
+flipside agents run flipside/sql_agent --message "What tables have Uniswap swap data?"
+flipside agents run flipside/sql_agent --message "Show me the schema for ethereum.defi.ez_dex_swaps"
+
+# Discover tables programmatically
+flipside tools find_tables "token transfers"
+
+# Get exact column names
+flipside tools get_table_schema ethereum.core.ez_token_transfers
+```
+
+**Tip:** Always verify table and column names before writing automation SQL. The agents know the schema and will write correct queries.
+
 ## YAML Structure
 
 ```yaml
