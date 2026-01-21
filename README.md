@@ -11,7 +11,8 @@ Blockchain data for AI agents. Query seven trillion rows across [40+ chains](htt
 | 1 | **Chat with your data** | `flipside chat` |
 | 2 | **Use Flipside agents** | `flipside agents run flipside/sql_agent --message "Top DEX swaps today"` |
 | 3 | **Build your own agents** | `flipside quickstart ./my-agents` |
-| 4 | **Upload your data** | `flipside uploads upload data.csv` |
+| 4 | **Automate recurring analysis** | `flipside automations init my_pipeline` |
+| 5 | **Upload your data** | `flipside uploads upload data.csv` |
 
 ---
 
@@ -112,6 +113,50 @@ JOIN ethereum.core.fact_balances b ON w.address = b.address
 
 ---
 
+## Automations
+
+Automations are intelligent workflows that orchestrate SQL queries, AI transforms, and multi-agent systems in parallel. Execute on demand or schedule in advance, toggle notification cadence, and route results to Slack, Discord, Email, or Telegram. Trigger ad-hoc runs, chat with an agent to analyze results, and compare against past runs.
+
+```bash
+# Create an automation template
+flipside automations init my_pipeline
+
+# Deploy it
+flipside automations push my_pipeline.workflow.yaml
+
+# Run with inputs
+flipside automations run <automation-id> -i '{"wallet_address": "0x1234..."}'
+
+# Monitor runs
+flipside automations runs list <automation-id>
+flipside automations runs result <run-id>
+```
+
+### Chat with Results
+
+After an automation runs, chat with the results using AI:
+
+```bash
+flipside chat --run <run-id>
+```
+
+This opens an interactive session where you can ask questions about the results, request analysis, and explore the data conversationally.
+
+### Step Types
+
+| Type | Description |
+|------|-------------|
+| `sql_statement` | Execute SQL against 40+ chains |
+| `llm_transform` | Transform or summarize data with AI |
+| `agent` | Run an agent with its own skills and tools |
+| `email` / `slack` / `discord` / `telegram` | Deliver alerts anywhere |
+| `conditional` | Branch logic based on natural language conditions |
+| `upload` | Pull in your own CSV data |
+
+See [docs/automations.md](./docs/automations.md) for YAML structure and examples.
+
+---
+
 ## Reference
 
 ### Tools (for Agent Builders)
@@ -129,15 +174,6 @@ These are tools you can give your agents access to:
 ```bash
 flipside tools list              # List all tools
 flipside tools schema <tool>     # Get tool schema
-```
-
-### Other Features
-
-**Workflows** — Automated pipelines for recurring analysis:
-```bash
-flipside workflows init my_workflow
-flipside workflows push my_workflow.yaml
-flipside workflows run <id>
 ```
 
 ### Global Flags
@@ -180,9 +216,13 @@ flipside query list            List queries
 flipside query-run status <id> Check run status
 flipside query-run download    Download results
 
-flipside workflows init        Create workflow
-flipside workflows push        Deploy workflow
-flipside workflows run         Trigger workflow
+flipside automations init      Create automation YAML
+flipside automations push      Deploy automation
+flipside automations run       Run automation
+flipside automations runs list List runs
+flipside automations runs result  Get run results
+
+flipside chat --run <run-id>   Chat with automation results
 
 flipside uploads upload        Upload CSV
 flipside uploads list          List uploads
@@ -197,4 +237,5 @@ flipside config show           View config
 
 - [docs/agents.md](./docs/agents.md) — Agent YAML reference
 - [docs/skills.md](./docs/skills.md) — Skill YAML reference
+- [docs/automations.md](./docs/automations.md) — Automations YAML reference
 - [Flipside Docs](https://docs.flipsidecrypto.xyz) — Full documentation
