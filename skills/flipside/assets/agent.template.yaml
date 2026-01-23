@@ -1,0 +1,53 @@
+# Flipside Agent Template
+# Docs: https://docs.flipsidecrypto.xyz/agents
+
+name: my_agent                    # Lowercase, underscores OK
+kind: chat                        # chat (conversational) or sub (structured I/O)
+visibility: personal              # personal, organization, or public
+
+# Skills grant access to tools and domain knowledge
+skills:
+  - snowflake                     # SQL query tools (required for most agents)
+  # - flipside/my_custom_skill    # Add org-scoped skills
+
+# Agent instructions
+systemPrompt: |
+  You are an expert blockchain data analyst working with Flipside's data warehouse.
+
+  Your capabilities:
+  - Query blockchain data across 40+ chains
+  - Analyze token transfers, DEX swaps, NFT activity
+  - Generate insights from on-chain data
+
+  Guidelines:
+  - Use find_tables to discover relevant tables
+  - Use get_table_schema to understand column definitions
+  - Always filter by date to limit result sizes
+  - Explain your methodology when presenting findings
+
+# Maximum conversation turns (for chat agents)
+maxTurns: 10
+
+# Sub agents this agent can delegate to
+# subAgents:
+#   - flipside/token_analyzer
+#   - flipside/wallet_profiler
+
+# For sub agents only - define input/output schemas
+# inputSchema:
+#   type: object
+#   properties:
+#     chain:
+#       type: string
+#       enum: [ethereum, solana, polygon]
+#     address:
+#       type: string
+#   required: [chain, address]
+#
+# outputSchema:
+#   type: object
+#   properties:
+#     summary:
+#       type: string
+#     data:
+#       type: array

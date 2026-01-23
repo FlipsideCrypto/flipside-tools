@@ -1,0 +1,62 @@
+# Flipside Skill Template
+# Docs: https://docs.flipsidecrypto.xyz/skills
+
+name: My Custom Skill             # Human-readable display name
+slug: my_custom_skill             # URL-safe identifier (lowercase, underscores)
+description: What this skill provides to agents
+
+# Tools this skill grants access to
+tools:
+  - run_sql_query                 # Execute SQL queries
+  - find_tables                   # Search for tables by keyword
+  - get_table_schema              # Get column definitions
+  # - create_visualization        # Generate charts
+  # - web_search                  # Search the internet
+
+# Domain knowledge (injected into agent context)
+knowledge: |
+  # My Custom Skill
+
+  ## Overview
+  This skill provides expertise in [domain area].
+
+  ## Key Tables
+
+  | Table | Description |
+  |-------|-------------|
+  | ethereum.defi.ez_dex_swaps | DEX swap transactions |
+  | ethereum.core.ez_token_transfers | Token transfers |
+
+  ## Best Practices
+
+  1. Always filter by date to limit result sizes
+  2. Use LOWER() for address comparisons
+  3. Check token decimals before calculating amounts
+
+  ## Example Queries
+
+  ### Basic Query
+  ```sql
+  SELECT *
+  FROM ethereum.defi.ez_dex_swaps
+  WHERE block_timestamp >= CURRENT_DATE - 7
+  LIMIT 100
+  ```
+
+  ### Advanced Pattern
+  ```sql
+  SELECT
+    platform,
+    COUNT(*) as tx_count,
+    SUM(amount_in_usd) as volume_usd
+  FROM ethereum.defi.ez_dex_swaps
+  WHERE block_timestamp >= CURRENT_DATE - 7
+  GROUP BY platform
+  ORDER BY volume_usd DESC
+  ```
+
+  ## Common Pitfalls
+
+  - Forgetting to use LOWER() on addresses
+  - Not filtering by date (can return millions of rows)
+  - Confusing ez_ tables with fact_ tables
