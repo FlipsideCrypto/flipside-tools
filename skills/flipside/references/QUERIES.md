@@ -1,28 +1,75 @@
-# Queries & Table Discovery
+# Queries & SQL Execution
 
-## Finding Tables
+## Running SQL Queries
 
-Use `find_tables` to discover relevant tables by keyword:
+### Through Chat (Recommended)
 
-```bash
-flipside tools find_tables "token transfers"
-flipside tools find_tables "dex swaps"
-flipside tools find_tables "nft sales"
-flipside tools find_tables "uniswap"
-```
-
-This searches table names and descriptions across all chains.
-
-## Getting Table Schema
-
-Once you find a table, get its schema:
+Use `flipside chat` for interactive data exploration. The chat interface has built-in agents that understand Flipside's schema:
 
 ```bash
-flipside tools get_table_schema ethereum.core.ez_token_transfers
-flipside tools get_table_schema solana.defi.fact_swaps
+flipside chat
 ```
 
-This shows all columns, data types, and descriptions.
+Then ask questions like:
+- "Show me the top DEX swaps on Ethereum today"
+- "What are the largest USDC transfers in the last 24 hours?"
+- "Find wallet activity for vitalik.eth"
+
+### Through Agents
+
+Run queries programmatically through your organization's agents:
+
+```bash
+# First, list available agents
+flipside agents list
+
+# Run a chat agent with your query request
+flipside agents run <org>/<agent_name> --message "Get ETH transfers over 100 ETH in the last 24 hours"
+```
+
+### Direct SQL Queries
+
+For simple queries or when you know the exact SQL:
+
+```bash
+# Create and execute a query
+flipside query create "SELECT * FROM ethereum.core.ez_token_transfers LIMIT 10"
+
+# Create a named saved query
+flipside query create --name "My Query" "SELECT ..."
+
+# List saved queries
+flipside query list
+
+# Execute a saved query by ID
+flipside query execute <query-id>
+```
+
+## Query Results
+
+### Getting Results
+
+```bash
+# Execute returns a run ID
+flipside query execute <query-id>
+# Output: Run ID: abc123...
+
+# Check run status
+flipside query-run status <run-id>
+
+# Get results once complete
+flipside query-run result <run-id>
+
+# Poll until complete (blocks until done)
+flipside query-run poll <run-id>
+```
+
+### Result Formats
+
+```bash
+flipside query-run result <run-id>              # Default table format
+flipside query-run result <run-id> --json       # JSON output
+```
 
 ## Table Naming Conventions
 
@@ -31,6 +78,13 @@ Flipside tables follow this pattern:
 ```
 <chain>.<category>.<table_name>
 ```
+
+### Supported Chains
+
+Flipside supports 40+ chains including:
+- ethereum, polygon, arbitrum, optimism, base, avalanche
+- solana, near, flow, cosmos
+- bitcoin, aptos, sui
 
 ### Categories
 
@@ -48,63 +102,12 @@ Flipside tables follow this pattern:
 - **Fact tables** (`fact_*`) - Lower-level, more granular data
 - **Dim tables** (`dim_*`) - Dimension/lookup tables
 
-```bash
-# Prefer EZ tables for common queries
-flipside tools get_table_schema ethereum.core.ez_token_transfers
+```sql
+-- Prefer EZ tables for common queries
+SELECT * FROM ethereum.core.ez_token_transfers LIMIT 10
 
-# Use fact tables for advanced analysis
-flipside tools get_table_schema ethereum.core.fact_token_transfers
-```
-
-## Running SQL
-
-### Through Agents (Recommended)
-
-Let agents write the SQL—they know the schema:
-
-```bash
-flipside agents run flipside/sql_agent --message "Get ETH transfers over 100 ETH in the last 24 hours"
-```
-
-### Direct Queries
-
-For simple queries or when you know the exact SQL:
-
-```bash
-# Create and execute in one step
-flipside query create "SELECT * FROM ethereum.core.ez_token_transfers LIMIT 10"
-
-# Or manage saved queries
-flipside query create --name "My Query" "SELECT ..."
-flipside query list
-flipside query execute <query-id>
-```
-
-## Query Results
-
-### Getting Results
-
-```bash
-# Execute returns a run ID
-flipside query execute <query-id>
-# Output: Run ID: abc123...
-
-# Get results
-flipside query-run result <run-id>
-
-# Poll until complete
-flipside query-run poll <run-id>
-
-# Download as CSV
-flipside query-run download <run-id> --format csv
-```
-
-### Result Formats
-
-```bash
-flipside query-run result <run-id>              # Default table format
-flipside query-run result <run-id> --json       # JSON output
-flipside query-run download <run-id> -o out.csv # Save to file
+-- Use fact tables for advanced analysis
+SELECT * FROM ethereum.core.fact_token_transfers LIMIT 10
 ```
 
 ## Common Query Patterns
@@ -162,5 +165,5 @@ LIMIT 100
 1. **Always use LOWER()** for address comparisons—addresses are stored lowercase
 2. **Use LIMIT** during development to avoid large result sets
 3. **Filter by date** with `block_timestamp >= CURRENT_DATE - N`
-4. **Check column names** with `get_table_schema` before writing queries
-5. **Let agents help** when you're unsure about table structure
+4. **Use chat for discovery** - when unsure about tables, use `flipside chat` to explore
+5. **Let agents help** when you're unsure about table structure or complex queries

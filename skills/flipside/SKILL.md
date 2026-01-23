@@ -9,7 +9,7 @@ compatibility: Requires flipside CLI installed and authenticated (flipside login
 allowed-tools: Bash(flipside:*) Read Write
 metadata:
   author: flipside
-  version: "1.0"
+  version: "1.1"
   homepage: https://flipsidecrypto.xyz
 ---
 
@@ -17,94 +17,153 @@ metadata:
 
 Query blockchain data, create AI agents, and build automated data pipelines.
 
-## Golden Rule
+## First Steps
 
-**Always use Flipside agents for SQL.** Don't write SQL from scratch—use an agent to generate correct queries against Flipside's data warehouse.
-
-```bash
-# Chat agent (conversational) - use --message
-flipside agents run flipside/sql_agent --message "Get the top 10 DEX swaps on Ethereum today"
-
-# Sub agent (structured I/O) - use --data-json
-flipside agents run flipside/token_analyzer --data-json '{"chain": "ethereum", "token_address": "0x..."}'
-
-# Always use --title when testing (makes runs easier to find)
-flipside agents run flipside/my_agent --message "test query" --title "Testing from Cursor"
-```
-
-Agents understand the schema, know the right tables, and write correct SQL. They have access to tools like `find_tables`, `get_table_schema`, and `run_sql_query`.
-
-## Quick Start
+**Always start by checking what's available in the user's organization:**
 
 ```bash
-# 1. Check authentication
+# 1. Verify authentication and see the current org
 flipside whoami
 
-# 2. Start an interactive chat with the SQL agent
-flipside chat
+# 2. List available agents (names vary by org)
+flipside agents list
 
-# 3. Or run a one-off query through an agent
-flipside agents run flipside/sql_agent --message "Show me the largest ETH transfers today"
+# 3. List available skills
+flipside skills list
 ```
 
-## Core Workflows
+Agent and skill names are organization-specific. Always run `flipside agents list` to discover what agents are available before trying to use them.
 
-| Task | Command | Reference |
-|------|---------|-----------|
-| Explore data interactively | `flipside chat` | - |
-| Run SQL through an agent | `flipside agents run flipside/sql_agent --message "..."` | [AGENTS.md](references/AGENTS.md) |
-| Discover tables | `flipside tools find_tables "token transfers"` | [QUERIES.md](references/QUERIES.md) |
-| Get table schema | `flipside tools get_table_schema ethereum.core.ez_token_transfers` | [QUERIES.md](references/QUERIES.md) |
-| Create your own agent | `flipside agents init my_agent` | [AGENTS.md](references/AGENTS.md) |
-| Build a data pipeline | `flipside automations init my_pipeline` | [AUTOMATIONS.md](references/AUTOMATIONS.md) |
-| Create reusable skills | `flipside skills init my_skill` | [SKILLS.md](references/SKILLS.md) |
+## Golden Rule
 
-## Agent References
-
-**IMPORTANT:** Agent references MUST use the `org/agent_name` format.
+**Use Flipside agents for SQL queries.** Don't write SQL from scratch—let the agents generate correct queries against Flipside's data warehouse.
 
 ```bash
-# Correct
-flipside agents run flipside/sql_agent --message "..."
+# One-shot query (no session memory)
+flipside agents run <org>/<agent_name> --message "Get the top 10 DEX swaps on Ethereum today"
 
-# Wrong - will fail
-flipside agents run sql_agent --message "..."
+# Multi-turn conversation (maintains context between messages)
+flipside chat create  # get session ID
+flipside chat send-message --session-id <id> "Get top DEX swaps on Ethereum"
+flipside chat send-message --session-id <id> "Now filter to only Uniswap"
+
+# Always use --title when testing (makes sessions easier to find)
+flipside agents run <org>/<agent_name> --message "test query" --title "Testing from Claude Code"
 ```
 
-## Command Cheatsheet
+## Primary Workflows
+
+### One-Shot Queries (agents run)
+
+For single queries without session memory, use `flipside agents run`:
+
+```bash
+# First, list available agents to find the right one
+flipside agents list
+
+# Run a chat agent with a message
+flipside agents run <org>/<agent_name> --message "Show me the largest ETH transfers today"
+
+# Run a sub agent with structured JSON input
+flipside agents run <org>/<agent_name> --data-json '{"chain": "ethereum", "limit": 10}'
+
+# Add a title for easier session tracking
+flipside agents run <org>/<agent_name> --message "Query request" --title "My analysis"
+```
+
+**IMPORTANT:** Agent names MUST use the `org/agent_name` format. Get the exact names from `flipside agents list`.
+
+### Multi-Turn Conversations (chat)
+
+For conversations that need session memory (follow-up questions, context from previous messages), use chat:
+
+```bash
+# Create a new chat session
+flipside chat create
+# Returns: Session ID: abc123...
+
+# Send messages to the session (maintains context)
+flipside chat send-message --session-id <session-id> "What were the top DEX swaps on Ethereum yesterday?"
+
+# Follow up (the session remembers previous context)
+flipside chat send-message --session-id <session-id> "Now show me the same for Arbitrum"
+
+# List your sessions
+flipside chat list
+
+# Resume an existing session interactively
+flipside chat resume
+```
+
+Use chat when you need:
+- Follow-up questions that reference previous answers
+- Multi-step analysis where context matters
+- Building on previous query results
+
+### Running SQL Directly
+
+For known queries, you can run SQL directly:
+
+```bash
+# Create and execute a query
+flipside query create "SELECT * FROM ethereum.core.fact_blocks LIMIT 10"
+
+# Execute an existing saved query
+flipside query execute <query-id>
+
+# Get results from a query run
+flipside query-run result <run-id>
+```
+
+## Command Reference
 
 ### Agents
 
 ```bash
 flipside agents list                              # List available agents
-flipside agents init my_agent                     # Create agent YAML
+flipside agents init my_agent                     # Create agent YAML template
 flipside agents validate my_agent.agent.yaml      # Validate before deploy
 flipside agents push my_agent.agent.yaml          # Deploy agent
-flipside agents run org/agent --message "..."     # Run chat agent
-flipside agents run org/agent --data-json '{}'    # Run sub agent
-flipside agents describe org/agent                # Show agent details
-flipside agents pull org/agent                    # Download agent YAML
+flipside agents run <org>/<agent> --message "..." # Run chat agent
+flipside agents run <org>/<agent> --data-json '{}' # Run sub agent
+flipside agents describe <org>/<agent>            # Show agent details
+flipside agents pull <org>/<agent>                # Download agent YAML
+flipside agents delete <org>/<agent>              # Delete an agent
 ```
 
-### Queries & Data
+### Chat
 
 ```bash
-flipside tools find_tables "swap"                 # Find tables by keyword
-flipside tools get_table_schema <table>           # Get column definitions
+flipside chat                                     # Start interactive chat
+flipside chat --run <run-id>                      # Chat about an automation run
+flipside chat resume                              # Resume previous chat
+flipside chat list                                # List chat sessions
+flipside chat send-message --session-id <id> "x" # Programmatic message
+```
+
+### Queries
+
+```bash
 flipside query create "SELECT ..."                # Create saved query
-flipside query execute <query-id>                 # Run saved query
+flipside query list                               # List saved queries
+flipside query get <query-id>                     # Get query details
+flipside query execute <query-id>                 # Execute query (creates run)
+flipside query runs <query-id>                    # List runs for a query
 flipside query-run result <run-id>                # Get query results
+flipside query-run status <run-id>                # Check run status
+flipside query-run poll <run-id>                  # Poll until complete
 ```
 
 ### Automations
 
 ```bash
+flipside automations list                         # List automations
 flipside automations init my_pipeline             # Create automation YAML
 flipside automations validate <file>              # Validate before deploy
 flipside automations push <file>                  # Deploy automation
-flipside automations run <id>                     # Run automation
+flipside automations run <id>                     # Trigger automation
 flipside automations run <id> -i '{"key":"val"}'  # Run with inputs
-flipside automations runs list <automation-id>    # List runs
+flipside automations runs list <id>               # List runs
 flipside automations runs result <run-id>         # Get run results
 ```
 
@@ -116,43 +175,39 @@ flipside skills init my_skill                     # Create skill YAML
 flipside skills push my_skill.skill.yaml          # Deploy skill
 ```
 
-### Chat
+### Utilities
 
 ```bash
-flipside chat                                     # Start interactive chat
-flipside chat --run <run-id>                      # Chat about a run
-flipside chat resume                              # Resume previous chat
-flipside chat send-message --session-id <id> "x"  # Programmatic message
+flipside whoami                                   # Show current user/org
+flipside --help                                   # Full command help
+flipside <command> --help                         # Help for specific command
+flipside update                                   # Update CLI to latest version
 ```
 
 ## When to Load References
 
 Load the detailed reference files when you need:
 
-- **[QUERIES.md](references/QUERIES.md)** - Table discovery, SQL patterns, result handling
 - **[AGENTS.md](references/AGENTS.md)** - Agent YAML schema, chat vs sub agents, deployment
 - **[AUTOMATIONS.md](references/AUTOMATIONS.md)** - Pipeline steps, DAG edges, scheduling
 - **[SKILLS.md](references/SKILLS.md)** - Creating reusable tool bundles
 - **[TABLES.md](references/TABLES.md)** - Common tables by chain (Ethereum, Solana, etc.)
+- **[QUERIES.md](references/QUERIES.md)** - SQL patterns, result handling
 
-## Validation Before Deploy
-
-Always validate YAML files before pushing:
+## Creating New Agents
 
 ```bash
-# Validate agent
+# 1. Create a template
+flipside agents init my_agent
+
+# 2. Edit the generated YAML file
+# my_agent.agent.yaml
+
+# 3. Validate before deploying
 flipside agents validate my_agent.agent.yaml
 
-# Validate automation
-flipside automations validate my_pipeline.yaml
-```
-
-Or use the included scripts:
-
-```bash
-scripts/validate-agent.sh my_agent.agent.yaml
-scripts/validate-automation.sh my_pipeline.yaml
-scripts/check-auth.sh
+# 4. Deploy
+flipside agents push my_agent.agent.yaml
 ```
 
 ## Templates
@@ -164,3 +219,12 @@ Starter templates are available in `assets/`:
 - `assets/skill.template.yaml` - Basic skill config
 
 Copy and customize these for new projects.
+
+## Troubleshooting
+
+If a command fails:
+
+1. Check authentication: `flipside whoami`
+2. Check CLI version: `flipside --version` and `flipside update`
+3. Use verbose mode: `flipside --verbose <command>`
+4. Check JSON output for details: `flipside --json <command>`
