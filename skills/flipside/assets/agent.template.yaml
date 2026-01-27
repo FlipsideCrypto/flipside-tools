@@ -28,6 +28,11 @@ systemPrompt: |
 # Maximum conversation turns (for chat agents)
 maxTurns: 10
 
+# Model and execution settings
+metadata:
+  model: claude-4-5-sonnet           # Model to use (claude-4-5-haiku, claude-4-5-sonnet, opus-4-5)
+  reasoning: false                   # Enable extended thinking (requires sonnet or opus)
+
 # Sub agents this agent can delegate to
 # subAgents:
 #   - flipside/token_analyzer
