@@ -4,23 +4,34 @@ Skills bundle tools and domain knowledge for agents. They're reusable packages t
 
 > **Note:** These are Flipside platform skills (used by Flipside agents), not Agent Skills (the package format this skill uses).
 
+## Auto-Injected Skill
+
+The `flipside/data` skill is **automatically injected** into all agents. This provides core SQL query tools:
+- `find_tables` - Search for tables by keyword (semantic search)
+- `find_tables_by_name` - Search for tables by name pattern
+- `get_table_schema` - Get column definitions for a table
+- `run_query` - Execute a new SQL query
+- `update_query` - Update an existing query's SQL
+- `run_query_by_id` - Execute an existing query by ID
+- `get_query_results` - Fetch more rows from a completed query
+
+You don't need to manually add this skill—every agent gets SQL capabilities by default.
+
 ## Skill Types
 
 | Type | Reference Format | Example |
 |------|------------------|---------|
-| Global | Just the name | `snowflake` |
 | Org-scoped | `org/skill_slug` | `flipside/defi_analysis` |
 
 ## Using Skills in Agents
 
-Reference skills in your agent's YAML:
+Reference skills in your agent's YAML for additional capabilities beyond the auto-injected `flipside/data`:
 
 ```yaml
 name: my_agent
 kind: chat
 skills:
-  - snowflake                     # Global skill
-  - flipside/defi_analysis        # Org-scoped skill
+  - flipside/defi_analysis        # Org-scoped skill for extra capabilities
 systemPrompt: |
   You are a DeFi analyst...
 ```

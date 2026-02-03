@@ -38,6 +38,8 @@ Agent and skill names are organization-specific. Always run `flipside agents lis
 
 **Use Flipside agents for SQL queries.** Don't write SQL from scratch—let the agents generate correct queries against Flipside's data warehouse.
 
+> **Note:** The `flipside/data` skill is automatically injected into all agents, providing SQL query tools. You don't need to manually configure this.
+
 ```bash
 # One-shot query (no session memory)
 flipside agents run <org>/<agent_name> --message "Get the top 10 DEX swaps on Ethereum today"
@@ -202,6 +204,7 @@ flipside agents init my_agent
 
 # 2. Edit the generated YAML file
 # my_agent.agent.yaml
+# Note: flipside/data skill is auto-injected - SQL tools work out of the box
 
 # 3. Validate before deploying
 flipside agents validate my_agent.agent.yaml

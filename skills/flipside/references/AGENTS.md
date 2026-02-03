@@ -37,9 +37,10 @@ kind: chat                        # chat or sub
 # Visibility
 visibility: personal              # personal, organization, or public
 
-# Skills to use
+# Skills (optional - flipside/data is auto-injected)
+# The flipside/data skill is automatically injected into ALL agents,
+# providing core SQL query tools. You only need to add skills here for additional capabilities.
 skills:
-  - snowflake                     # Global skill (SQL access)
   - flipside/my_custom_skill      # Org-scoped skill
 
 # Instructions
@@ -114,17 +115,25 @@ Skills bundle tools and domain knowledge. Reference them by name:
 
 ```yaml
 skills:
-  - snowflake                     # Global: SQL query access
   - flipside/defi_analysis        # Org-scoped skill
 ```
 
-### Common Skills
+### Auto-Injected Skill
 
-| Skill | Description |
-|-------|-------------|
-| `snowflake` | Core SQL query tools (find_tables, get_table_schema, run_sql_query) |
+The `flipside/data` skill is **automatically injected** into all agents. This provides:
+- `find_tables` - Search for tables by keyword (semantic search)
+- `find_tables_by_name` - Search for tables by name pattern
+- `get_table_schema` - Get column definitions for a table
+- `run_query` - Execute a new SQL query
+- `update_query` - Update an existing query's SQL
+- `run_query_by_id` - Execute an existing query by ID
+- `get_query_results` - Fetch more rows from a completed query
 
-List available skills:
+You don't need to add this skill manually—every agent gets SQL query capabilities by default.
+
+### Adding Custom Skills
+
+Add org-scoped skills for additional capabilities:
 
 ```bash
 flipside skills list
@@ -137,8 +146,7 @@ Chat agents can delegate to sub-agents for specialized tasks:
 ```yaml
 name: research_agent
 kind: chat
-skills:
-  - snowflake
+# flipside/data is auto-injected - SQL tools work out of the box
 
 subAgents:
   - flipside/token_analyzer       # Structured token analysis
@@ -148,7 +156,7 @@ systemPrompt: |
   You are a research coordinator. When users ask about:
   - Token analysis: delegate to token_analyzer
   - Wallet behavior: delegate to wallet_profiler
-  - General SQL: handle directly with snowflake tools
+  - General SQL: handle directly with your SQL tools
 ```
 
 ## Managing Agents
@@ -187,7 +195,7 @@ flipside agents run org/agent --message "..." --verbose
 
 1. **Use descriptive names** - `wallet_risk_analyzer` not `agent1`
 2. **Write clear system prompts** - Explain the agent's role and capabilities
-3. **Start with `snowflake` skill** - Most agents need SQL access
+3. **SQL tools are automatic** - The `flipside/data` skill is auto-injected
 4. **Use sub-agents for specialization** - Delegate complex subtasks
 5. **Add --title when testing** - Makes runs easier to find in the UI
 6. **Validate before pushing** - Catches YAML errors early

@@ -5,10 +5,10 @@ name: my_agent                    # Lowercase, underscores OK
 kind: chat                        # chat (conversational) or sub (structured I/O)
 visibility: personal              # personal, organization, or public
 
-# Skills grant access to tools and domain knowledge
-skills:
-  - snowflake                     # SQL query tools (required for most agents)
-  # - flipside/my_custom_skill    # Add org-scoped skills
+# The flipside/data skill is automatically injected into ALL agents.
+# This provides core SQL query tools. You only need to add skills here for additional capabilities.
+# skills:
+#   - flipside/my_custom_skill    # Add org-scoped skills for extra capabilities
 
 # Agent instructions
 systemPrompt: |
