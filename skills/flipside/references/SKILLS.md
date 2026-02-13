@@ -17,6 +17,14 @@ The `flipside/data` skill is **automatically injected** into all agents. This pr
 
 You don't need to manually add this skill—every agent gets SQL capabilities by default.
 
+### `flipside/reporting` (Auto-Injected)
+
+The `flipside/reporting` skill is **automatically injected** into all agents. This provides report generation sub-agents:
+- `generate_report` - Create interactive reports with charts, tables, metrics from query results
+- `update_report` - Modify panels in existing reports (add, update, remove)
+
+You don't need to manually add this skill—every agent gets reporting capabilities by default.
+
 ## Skill Types
 
 | Type | Reference Format | Example |
