@@ -13,7 +13,7 @@ tools:
   # - create_visualization        # Generate charts
   # - web_search                  # Search the internet
 
-# Domain knowledge (injected into agent context)
+# Domain knowledge (injected into agent context when skill is loaded)
 knowledge: |
   # My Custom Skill
 
@@ -43,20 +43,17 @@ knowledge: |
   LIMIT 100
   ```
 
-  ### Advanced Pattern
-  ```sql
-  SELECT
-    platform,
-    COUNT(*) as tx_count,
-    SUM(amount_in_usd) as volume_usd
-  FROM ethereum.defi.ez_dex_swaps
-  WHERE block_timestamp >= CURRENT_DATE - 7
-  GROUP BY platform
-  ORDER BY volume_usd DESC
-  ```
-
-  ## Common Pitfalls
-
-  - Forgetting to use LOWER() on addresses
-  - Not filtering by date (can return millions of rows)
-  - Confusing ez_ tables with fact_ tables
+# Sections — independently loadable knowledge chunks (optional)
+# Agents see section descriptions in their system prompt, then load
+# specific sections on demand with use_skill("slug#section_key").
+# sections:
+#   dex_analysis:
+#     description: DEX swap patterns and key tables
+#     content: |
+#       # DEX Analysis
+#       Detailed patterns for analyzing DEX swaps...
+#   lending_analysis:
+#     description: Lending protocol query patterns
+#     content: |
+#       # Lending Analysis
+#       Detailed patterns for lending protocols...

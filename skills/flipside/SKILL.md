@@ -173,8 +173,12 @@ flipside automations runs result <run-id>         # Get run results
 
 ```bash
 flipside skills list                              # List available skills
-flipside skills init my_skill                     # Create skill YAML
+flipside skills init my_skill                     # Create skill YAML template
+flipside skills init my_skill --sections "a,b,c"  # Template with named sections
 flipside skills push my_skill.skill.yaml          # Deploy skill
+flipside skills pull <org>/<skill>                # Download skill YAML
+flipside skills delete <org>/<skill>              # Delete a skill
+flipside skills validate my_skill.skill.yaml      # Validate before deploy
 ```
 
 ### Utilities
@@ -192,7 +196,7 @@ Load the detailed reference files when you need:
 
 - **[AGENTS.md](references/AGENTS.md)** - Agent YAML schema, chat vs sub agents, deployment
 - **[AUTOMATIONS.md](references/AUTOMATIONS.md)** - Pipeline steps, DAG edges, scheduling
-- **[SKILLS.md](references/SKILLS.md)** - Creating reusable tool bundles
+- **[SKILLS.md](references/SKILLS.md)** - Creating reusable tool bundles with sections
 - **[TABLES.md](references/TABLES.md)** - Common tables by chain (Ethereum, Solana, etc.)
 - **[QUERIES.md](references/QUERIES.md)** - SQL patterns, result handling
 

@@ -118,7 +118,7 @@ tools:
   - create_visualization        # Create charts
   - web_search                  # Search the web
 
-# Domain knowledge (markdown)
+# Domain knowledge (markdown) — loaded when agent calls use_skill("slug")
 knowledge: |
   # Instructions and examples
 
@@ -130,7 +130,61 @@ knowledge: |
   - SQL patterns and examples
   - Domain-specific best practices
   - Common pitfalls to avoid
+
+# Sections — independently loadable knowledge chunks (optional)
+# Each section has a short description (for LLM discovery) and content (loaded on demand).
+# Agents load a specific section with use_skill("slug#section_key").
+sections:
+  dex_swaps:
+    description: DEX swap query patterns and tables
+    content: |
+      # DEX Swaps
+      Use ethereum.defi.ez_dex_swaps for swap data...
+  lending:
+    description: Lending protocol analysis patterns
+    content: |
+      # Lending
+      Use ethereum.defi.ez_lending_borrows for borrow data...
 ```
+
+## Sections
+
+Sections let you break a skill's knowledge into named chunks that agents load on demand. This is useful when a skill covers multiple topics and you don't want to load everything at once.
+
+### How Sections Work
+
+1. **Discovery** — When an agent starts, it sees each section's `description` in the system prompt
+2. **Loading** — The agent calls `use_skill("slug#section_key")` to load a specific section's `content`
+3. **Overview** — Calling `use_skill("slug")` without a fragment loads the top-level `knowledge` field and lists available sections
+
+### Section Format
+
+```yaml
+sections:
+  cartesian:
+    description: Line, bar, area charts on an x/y axis   # Short — shown to LLM for discovery
+    content: |                                             # Full content — loaded on demand
+      # Cartesian Charts
+      Detailed instructions, config schemas, examples...
+  sankey:
+    description: Flow diagrams between categories
+    content: |
+      # Sankey Diagrams
+      ...
+```
+
+### Rules
+
+- Section keys must be lowercase alphanumeric with underscores (`snake_case`)
+- Maximum 20 sections per skill
+- Descriptions should be short (1 line) — they're shown in the discovery prompt
+- Content can be any length — it's only loaded when requested
+
+### When to Use Sections
+
+- **Large skills** with multiple distinct topics (e.g., chart types, chain-specific patterns)
+- **Reference material** where agents only need one piece at a time
+- **Progressive disclosure** — overview in `knowledge`, details in sections
 
 ## Available Tools
 
