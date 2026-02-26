@@ -10,8 +10,8 @@ tools:
   - run_query                     # Execute SQL queries
   - find_tables                   # Search for tables by keyword
   - get_table_schema              # Get column definitions
-  # - create_visualization        # Generate charts
   # - web_search                  # Search the internet
+  # - build_report                # Generate interactive reports with charts
 
 # Domain knowledge (injected into agent context when skill is loaded)
 knowledge: |

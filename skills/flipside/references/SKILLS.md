@@ -17,13 +17,13 @@ The `flipside/data` skill is **automatically injected** into all agents. This pr
 
 You don't need to manually add this skill—every agent gets SQL capabilities by default.
 
-### `flipside/reporting` (Auto-Injected)
+### Report Building
 
-The `flipside/reporting` skill is **automatically injected** into all agents. This provides report generation sub-agents:
-- `generate_report` - Create interactive reports with charts, tables, metrics from query results
+The `report_builder` chat agent handles report creation. The research agent has direct access to:
+- `build_report` - Create interactive reports with charts, tables, metrics from query results
 - `update_report` - Modify panels in existing reports (add, update, remove)
 
-You don't need to manually add this skill—every agent gets reporting capabilities by default.
+These are registered as tools in the tool registry (not sub-agents).
 
 ## Skill Types
 
@@ -115,7 +115,6 @@ tools:
   - run_sql_query               # Execute SQL
   - find_tables                 # Search for tables
   - get_table_schema            # Get column definitions
-  - create_visualization        # Create charts
   - web_search                  # Search the web
 
 # Domain knowledge (markdown) — loaded when agent calls use_skill("slug")
@@ -193,8 +192,9 @@ sections:
 | `run_sql_query` | Execute SQL against Flipside data warehouse |
 | `find_tables` | Search for tables by keyword |
 | `get_table_schema` | Get column definitions for a table |
-| `create_visualization` | Generate charts from data |
 | `web_search` | Search the internet |
+| `build_report` | Generate interactive reports with charts, tables, metrics |
+| `update_report` | Modify panels in existing reports |
 
 ## Managing Skills
 
