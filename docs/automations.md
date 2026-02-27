@@ -106,8 +106,10 @@ edges:
 | `sql_query_id` | Execute a saved query by ID |
 | `agent` | Run an agent with its own skills and tools (see [Agent Steps](#agent-steps)) |
 | `llm_transform` | Transform or summarize data with AI |
+| `alert` | Evaluate conditions and fire alerts (see [Alert Steps](#alert-steps)) |
+| `report` | Generate a deterministic report with specific panel layout (see [Report Builder vs Report Step](#report-builder-vs-report-step)) |
 | `email` | Send email alerts |
-| `slack` | Send Slack alerts |
+| `slack` | Send Slack alerts (deterministic when downstream of alert) |
 | `discord` | Send Discord alerts |
 | `telegram` | Send Telegram alerts |
 | `upload` | Pull in your own CSV data |
@@ -186,6 +188,87 @@ Embed an agent directly in your automation:
 ```
 
 The agent receives all upstream step outputs and workflow inputs as context.
+
+## Alert Steps
+
+Alert steps evaluate conditions against upstream data and fire structured alerts:
+
+```yaml
+- id: whale_alert
+  name: Whale Movement Alert
+  type: alert
+  config:
+    title: "Large Transfer Detected"
+    level: critical              # critical | warning | opportunity | info | twitter
+    condition: "Fire when any transfer exceeds $10M"
+    blocks:
+      - id: details
+        type: text
+        title: "What happened?"
+        rules: "Summarize the transfer details in 2-3 sentences"
+```
+
+**Alert levels:** critical (red), warning (amber), opportunity (green), info (indigo), twitter (dark card with X branding).
+
+**Twitter level:** When level is `twitter`, upstream data can include engagement metrics (likes, retweets, replies, views) and a tweet author handle. These render on the card automatically.
+
+## Report Builder vs Report Step
+
+**Use report_builder agent directly 90% of the time.** The report step is mainly useful in the web app when you need to deterministically control the report layout before a final alert/notification step. For most CLI workflows, just use an agent step with report_builder instead.
+
+### Report Step (deterministic layout)
+
+```yaml
+- id: build_report
+  type: report
+  config:
+    title: "Weekly DEX Volume Analysis"
+    description: "Overview of DEX activity across top protocols"
+    blocks:
+      - type: chart          # chart | table | metric
+        chartType: line       # Optional: line, bar, area, donut, heatmap, treemap, bubble
+        title: "Daily Volume Trend"
+        intent: "Line chart showing daily DEX volume over the past 30 days"
+      - type: metric
+        title: "Total Volume"
+        intent: "Sum of all DEX volume in the period, formatted as USD"
+      - type: table
+        title: "Top Protocols"
+        intent: "Table of top 10 protocols by volume with protocol name and total volume"
+    stylingHints: "Use a clean color palette, emphasize trends"  # Optional
+```
+
+**Block types:** chart (visualization), table (data grid), metric (single KPI value).
+
+### Agent Step with report_builder (flexible)
+
+```yaml
+- id: build_report
+  type: agent
+  config:
+    agentConfigId: flipside/report_builder
+    instructions: "Create a report showing DEX volume trends and top protocols"
+```
+
+The report_builder agent decides what panels to create based on the data. More flexible, better for exploratory analysis.
+
+### Creating Agents That Generate Reports
+
+When building custom agents that need to create reports, use the `data_visualization` skill:
+
+```yaml
+# In your agent YAML
+skills:
+  - flipside/data_visualization   # Provides build_report, update_report, inspect_query_data
+subAgents:
+  - flipside/report_builder       # Delegates report generation
+```
+
+**Supported block types:** chart, table, metric. Do NOT use HTML blocks unless the user explicitly asks for custom HTML output.
+
+**Deprecated patterns to avoid:**
+- `reporting` skill (replaced by `data_visualization`)
+- `generate_report` tool (replaced by `build_report`)
 
 ## Deploying Updates
 
@@ -324,7 +407,7 @@ flipside automations runs result <run-id>   # Shows full output including errors
 |-------|----------|
 | `step id is required` | Every step needs a unique `id` field |
 | `edge references unknown step` | Check that `from` and `to` in edges match step `id` values |
-| `invalid step type` | Use valid types: `sql_statement`, `agent`, `llm_transform`, etc. |
+| `invalid step type` | Use valid types: `sql_statement`, `agent`, `llm_transform`, `alert`, `report`, etc. |
 | `agent step requires agentConfigId` | Find valid agents with `flipside agents list` |
 | Run stuck in `running` | Check `runs get` for step-level state; cancel with `runs cancel` |
 | SQL errors | Verify table names with `flipside tools find_tables` |
