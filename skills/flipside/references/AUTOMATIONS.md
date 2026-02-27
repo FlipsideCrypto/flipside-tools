@@ -115,10 +115,12 @@ edges:
 | `sql_query_id` | Run saved query by ID | `queryId` |
 | `agent` | Run a Flipside agent | `agentConfigId`, `instructions` |
 | `llm_transform` | AI-powered data transformation | `prompt`, `outputFormat` |
+| `alert` | Evaluate conditions and fire alerts | `title`, `level`, `condition`, `blocks` |
+| `report` | Generate a deterministic report | `title`, `blocks` (see [Report Builder vs Report Step](#report-builder-vs-report-step)) |
 | `conditional` | Branch based on conditions | `condition` (natural language) |
 | `upload` | Include uploaded CSV data | `uploadId` |
 | `email` | Send email notification | `to`, `subject`, `body` |
-| `slack` | Send Slack message | `channel`, `message` |
+| `slack` | Send Slack message (deterministic when downstream of alert) | `channel`, `message` |
 | `discord` | Send Discord message | `webhookUrl`, `message` |
 | `telegram` | Send Telegram message | `chatId`, `message` |
 
@@ -163,6 +165,76 @@ edges:
     condition: "If total volume exceeds $1M"
   # Edges from conditional steps can have conditions
 ```
+
+### Alert Step
+
+```yaml
+- id: whale_alert
+  type: alert
+  config:
+    title: "Large Transfer Detected"
+    level: critical              # critical | warning | opportunity | info | twitter
+    condition: "Fire when any transfer exceeds $10M"
+    blocks:
+      - id: details
+        type: text
+        title: "What happened?"
+        rules: "Summarize the transfer details in 2-3 sentences"
+```
+
+**Alert levels:** critical (red), warning (amber), opportunity (green), info (indigo), twitter (dark card with X branding).
+
+### Report Builder vs Report Step
+
+**Use report_builder agent directly 90% of the time.** The report step is mainly useful in the web app when you need to deterministically control the report layout before a final alert/notification step. For most CLI workflows, just use an agent step with report_builder instead.
+
+**Report step** (deterministic layout — you control exactly what panels appear):
+
+```yaml
+- id: build_report
+  type: report
+  config:
+    title: "Weekly DEX Volume Analysis"
+    description: "Overview of DEX activity across top protocols"
+    blocks:
+      - type: chart          # chart | table | metric
+        chartType: line       # Optional: line, bar, area, donut, heatmap, treemap, bubble
+        title: "Daily Volume Trend"
+        intent: "Line chart showing daily DEX volume over the past 30 days"
+      - type: metric
+        title: "Total Volume"
+        intent: "Sum of all DEX volume in the period, formatted as USD"
+      - type: table
+        title: "Top Protocols"
+        intent: "Table of top 10 protocols by volume with protocol name and total volume"
+    stylingHints: "Use a clean color palette, emphasize trends"
+```
+
+**Agent step with report_builder** (flexible — AI decides what to show):
+
+```yaml
+- id: build_report
+  type: agent
+  config:
+    agentConfigId: flipside/report_builder
+    instructions: "Create a report showing DEX volume trends and top protocols"
+```
+
+**Creating agents that generate reports:**
+
+```yaml
+# In your agent YAML
+skills:
+  - flipside/data_visualization   # Provides build_report, update_report, inspect_query_data
+subAgents:
+  - flipside/report_builder       # Delegates report generation
+```
+
+Supported block types: `chart`, `table`, `metric`. Do NOT use HTML blocks unless explicitly asked.
+
+Deprecated patterns to avoid:
+- `reporting` skill (replaced by `data_visualization`)
+- `generate_report` tool (replaced by `build_report`)
 
 ## Data Flow
 
