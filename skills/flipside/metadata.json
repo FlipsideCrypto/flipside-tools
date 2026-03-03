@@ -1,7 +1,7 @@
 {
   "name": "flipside",
   "description": "Query blockchain data across 40+ chains, create AI agents for crypto analytics, and build automated data pipelines.",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "author": "flipside",
   "homepage": "https://flipsidecrypto.xyz",
   "repository": "https://github.com/FlipsideCrypto/flipside-tools",
