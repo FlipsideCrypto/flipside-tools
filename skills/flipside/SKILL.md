@@ -15,7 +15,19 @@ metadata:
 
 # Flipside CLI
 
-Run this to get started:
+First, check if the CLI is installed:
+
+```bash
+flipside --version
+```
+
+If the command is not found, install it:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/FlipsideCrypto/flipside-tools/main/install.sh | sh
+```
+
+Then get started:
 
 ```bash
 flipside llm onboard
